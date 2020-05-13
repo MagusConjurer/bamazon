@@ -19,6 +19,7 @@ connection.connect(function(err){
 function runRequest(){
   if(running){
     displayCatalog();
+    placeOrder(3,1);
   } else{
     connection.end();
   }
@@ -32,13 +33,43 @@ function displayCatalog(){
       console.log("Available Items");
       console.log("ID | Product | Price");
       for(let i = 0; i < res.length; i++){
-        console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price);
+        console.log(res[i].item_id + " | " + res[i].product_name + " | $" + res[i].price);
       }
-
     }
   )
 };
 
-function placeOrder(item, selection){
-  
+function placeOrder(item, amount){
+  connection.query(
+    "SELECT stock_quantity, price FROM products WHERE item_id = ?",
+    item,
+    function(err, res){
+      if(err) throw err;
+      var stock = res[0].stock_quantity;
+      var cost = res[0].price;
+      if(stock >= amount){
+        console.log("Your order is being processed.")
+        connection.query(
+          "UPDATE products SET ? WHERE ?",
+          [
+            {
+              stock_quantity: (stock - amount)
+            },
+            {
+              item_id: item
+            }
+          ],
+          function(err, res){
+            if(err) throw err;
+            console.log(res.affectedRows + " order has been placed.");
+            console.log("Your total is: $" + (cost * amount));
+          }
+        );
+        
+      } else {
+        console.log("We do not have enough stock to fulfill that order.");
+      }
+    }
+
+  );
 };
