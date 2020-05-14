@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require("cli-table");
 
 var running = true;
 
@@ -11,6 +12,14 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
+var table = new Table({
+  head: ["ID", "Product", "Price"],
+  chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
+         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
+         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
+         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' }
+});
+
 connection.connect(function(err){
   if (err) throw err;
   runRequest();
@@ -19,7 +28,7 @@ connection.connect(function(err){
 function runRequest(){
   if(running){
     displayCatalog();
-    placeOrder(3,1);
+    //placeOrder(3,1);
   } else{
     connection.end();
   }
@@ -31,10 +40,11 @@ function displayCatalog(){
     function(err, res){
       if(err) throw err;
       console.log("Available Items");
-      console.log("ID | Product | Price");
       for(let i = 0; i < res.length; i++){
-        console.log(res[i].item_id + " | " + res[i].product_name + " | $" + res[i].price);
+        //console.log(res[i].item_id + " | " + res[i].product_name + " | $" + res[i].price);
+        table.push([res[i].item_id, res[i].product_name, "$" + res[i].price]);
       }
+      console.log(table.toString());
     }
   )
 };
