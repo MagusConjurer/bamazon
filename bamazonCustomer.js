@@ -6,6 +6,7 @@ var running = true;
 var table;
 var count = 0;
 
+// Credentials of the local MySQL connection
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -14,14 +15,13 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
-
-
 connection.connect(function(err){
   if (err) throw err;
   displayCatalog();
   runRequest();
 });
 
+// Prompt for whether the user would like to make a purchase
 function runRequest(){
   if(running){
     var message;
@@ -50,6 +50,7 @@ function runRequest(){
   }
 };
 
+// Query the database and display a table of the products table
 function displayCatalog(){
   connection.query(
     "SELECT * FROM products",
@@ -71,6 +72,7 @@ function displayCatalog(){
   )
 };
 
+// Query the database to make sure product is available and update stock
 function placeOrder(item, amount){
   connection.query(
     "SELECT stock_quantity, price FROM products WHERE item_id = ?",
@@ -108,6 +110,7 @@ function placeOrder(item, amount){
   );
 };
 
+// Prompt for the ID of the desired product
 function requestID(){
   inquirer.prompt([
     {
@@ -126,6 +129,7 @@ function requestID(){
   });
 };
 
+// Prompt for the desired quantity
 function requestQuantity(item){
   inquirer.prompt([
     {
