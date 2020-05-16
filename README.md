@@ -18,7 +18,9 @@ The app displays the catolog of available items and will take in orders from cus
 
 ### Examples
 
-bamazonCustomer
+##### bamazonCustomer
+
+![customer-example](https://raw.githubusercontent.com/MagusConjurer/bamazon/master/images/customer.png)
 
 ### How it Works
 Using the mysql NPM, this app queries a local database with a pregenerated products table. The information is then displayed as a table in the console using the cli-table NPM. The user can provide their input with inquirer NPM.
