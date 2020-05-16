@@ -5,6 +5,7 @@ var Table = require("cli-table");
 var running = true;
 var table;
 var count = 0;
+var numProducts;
 
 // Credentials of the local MySQL connection
 var connection = mysql.createConnection({
@@ -64,6 +65,7 @@ function displayCatalog(){
                , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
                , 'right': '║' , 'right-mid': '╢' , 'middle': '│' }
       });
+      numProducts = res.length;
       for(let i = 0; i < res.length; i++){
         table.push([res[i].item_id, res[i].product_name, "$" + res[i].price]);
       }
@@ -119,7 +121,7 @@ function requestID(){
       message: "Enter the ID of the product you would like to purchase:"
     }
   ]).then(function(answer){
-    if(answer.item < 0 && answer.item > 11){
+    if(answer.item < 0 && answer.item > numProducts){
       console.log("Please select an ID between 1 and 10.")
     } else{
       requestQuantity(answer.item);
