@@ -122,7 +122,7 @@ function requestID(){
     }
   ]).then(function(answer){
     if(answer.item < 0 && answer.item > numProducts){
-      console.log("Please select an ID between 1 and 10.")
+      console.log("Please select an ID between 1 and " + numProducts);
     } else{
       requestQuantity(answer.item);
     }

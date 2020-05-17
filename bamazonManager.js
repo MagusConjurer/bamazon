@@ -105,10 +105,88 @@ function viewLowInventory(){
     });
 };
 
+// product_name, department_name, price, stock_quantity
 function addInventory(){
-
+  connection.query(
+    "SELECT item_id, stock_quantity FROM products",
+    function(error,results){
+      if(error) throw error;
+      inquirer.prompt([
+        {
+          type: "number",
+          name: "id",
+          message: "Which product ID would you like to add inventory for?"
+        }
+      ]).then(function(input){
+        if(Number.isNaN(input.id) || (parseInt(input.id) < 1 && parseInt(input.id) > results.length)){
+          console.log("Please select an ID between 1 and " + results.length);
+          addInventory();
+        } else{
+          inquirer.prompt([
+            {
+              type: "number",
+              name: "stock",
+              message: "How much inventory do you have now?"
+            }
+          ]).then(function(answers){
+            connection.query(
+              "UPDATE products SET ? WHERE ?",
+              [
+                {
+                  stock_quantity: answers.stock
+                },
+                {
+                  item_id: input.id
+                }
+              ], 
+              function(err, res) {
+                if(err) throw err;
+                console.log("You have updated the inventory of " + res.affectedRows + " product.");
+                checkRequest();
+              }
+            )
+          });
+        }
+      }).catch(function(err){
+        if(err) throw err;
+      });
+  });
 }
 
 function addProduct(){
-
+  inquirer.prompt([
+    {
+      name: "product",
+      message: "What product would you like to add?"
+    },
+    {
+      name: "department",
+      message: "Which department is that product in?"
+    },
+    {
+      type: "number",
+      name: "price",
+      message: "How much does each unit cost?"
+    },
+    {
+      type: "number",
+      name: "stock",
+      message: "What is the starting amount in stock?"
+    }
+  ]).then(function(input){
+    connection.query(
+      "INSERT INTO products SET ?",
+      {
+        product_name: input.product, 
+        department_name: input.department, 
+        price: input.price, 
+        stock_quantity: input.stock
+      },
+      function(err,res){
+        if(err) throw err;
+        console.log(res.affectedRows + " product has been added to your inventory.");
+        checkRequest();
+      }
+    )
+  });
 }
