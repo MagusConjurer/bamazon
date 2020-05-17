@@ -16,11 +16,29 @@ The app displays the catolog of available items and will take in orders from cus
    1. Enter a quantity to purchase
 1. Enter "n" when prompted to make a purchase to end the program
 
+1. Run "node bamazonManager.js" to start the manager app
+1. Select an action
+   1. "View Products for Sale" shows all products and now includes their stock
+   1. "View Low Inventory" shows any items with less than 10 in stock
+   1. "Add to Inventory" allows the stock to be updated to a new amount
+   1. "Add New Product" allows the addition of a new product
+1. When prompted to complete another action, enter "n" to end the program
+
 ### Examples
 
-##### bamazonCustomer
+##### Bamazon Customer
 
 ![customer-example](https://raw.githubusercontent.com/MagusConjurer/bamazon/master/images/customer.png)
+
+##### Bamazon Manager
+
+###### Checking Inventory
+
+![manager-example-inventory](https://raw.githubusercontent.com/MagusConjurer/bamazon/master/images/manager-check.png)
+
+###### Adding Inventory and New Products
+
+![manager-example-adding](https://raw.githubusercontent.com/MagusConjurer/bamazon/master/images/manager-add.png)
 
 ### How it Works
 Using the mysql NPM, this app queries a local database with a pregenerated products table. The information is then displayed as a table in the console using the cli-table NPM. The user can provide their input with inquirer NPM.
